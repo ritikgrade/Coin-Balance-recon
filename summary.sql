@@ -1,15 +1,15 @@
 
 
-use HPPAYProd
-
 declare @startdate date = '20230701'--cast(getdate()-1 as date)
 declare @enddate date ='20230801'--cast(getdate() as date)
 declare @prev_start date ='20230203'
 declare @prev_end date = @startdate
 
 
-select *,(Settled_next+Settled_prev+Additional)as overall_diff,(case when Points=Diff then 'Transaction is not Settled' when glnot=Diff then 'GL Was not created that time'
-			when (Settled_next+Settled_prev+Additional)=Diff then 'Difference amount is settled next month or settled from previous month or it is from Cobranded transaction that is processed in september '
+select *,(Settled_next+Settled_prev+Additional)as overall_diff,
+	(case when Points=Diff then 'Transaction is not Settled' when glnot=Diff then 'GL Was not created that time'
+		when (Settled_next+Settled_prev+Additional)=Diff 
+		then 'Difference amount is settled next month or settled from previous month or it is from Cobranded transaction that is processed in september '
 			else '' end ) as Remark 
 
 from ( 
@@ -206,9 +206,6 @@ on GL_not_created.Customer_Id=l.Customer_id
 group by Cust
 ) as h
 WHERE H.Calculated<>h.Closing 
---and 
---Cust=1014059300
-
 
 
 --where dump.[Total credit]>0 or dump.[Total debit]<>0
